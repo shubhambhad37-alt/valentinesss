@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentines Day</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -21,19 +22,15 @@
     }
 
     @keyframes bounce2 {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-20px); }
-      60% { transform: translateY(-10px); }
-    }
-
-    /* smooth image change */
-    .fade {
-      animation: fadeIn 0.35s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0.6; }
-      to { opacity: 1; }
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
     }
   </style>
 </head>
@@ -46,6 +43,7 @@
       <img
         id="imageDisplay"
         src="./images/image1.gif"
+        alt="Cute kitten with flowers"
         class="rounded-md h-[300px]"
         style="object-fit: cover;"
       />
@@ -60,14 +58,14 @@
       <div class="flex gap-4 pt-5 items-center" id="responseButtons">
         <button
           id="yesButton"
-          class="bounce2 px-4 py-2 bg-green-500 text-white rounded-md text-[20px] hover:bg-green-400 transition"
+          class="bounce2 inline-flex items-center justify-center rounded-md text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition"
         >
           Yes
         </button>
 
         <button
           id="noButton"
-          class="px-4 py-2 bg-red-500 text-white rounded-md text-[20px] hover:bg-red-700 transition"
+          class="inline-flex items-center justify-center rounded-md text-[20px] font-medium hover:bg-red-700 h-12 min-w-[75px] px-4 py-2 bg-red-500 text-white transition"
         >
           No
         </button>
@@ -75,7 +73,7 @@
     </div>
   </div>
 
-  <!-- 🎵 AUDIO FILES -->
+  <!-- 🎵 MUSIC FILES -->
   <audio id="sadMusic" loop preload="auto">
     <source src="./audio/sad.mp3" type="audio/mpeg">
   </audio>
@@ -96,7 +94,8 @@
     const happyMusic = document.getElementById("happyMusic");
 
     let noClickCount = 0;
-    let buttonSize = 48;
+    let buttonHeight = 48;
+    let buttonWidth = 80;
     let fontSize = 20;
 
     const imagePaths = [
@@ -109,13 +108,13 @@
       "./images/image7.gif"
     ];
 
-    /* 🚀 PRELOAD IMAGES (FIXES DELAY) */
+    // 🚀 PRELOAD IMAGES (NO DELAY)
     imagePaths.forEach(src => {
       const img = new Image();
       img.src = src;
     });
 
-    // ❌ NO CLICK
+    // ❌ NO CLICK → SAD MUSIC
     noButton.addEventListener("click", () => {
       if (sadMusic.paused) sadMusic.play();
       happyMusic.pause();
@@ -125,39 +124,36 @@
         noClickCount++;
         imageDisplay.src = imagePaths[noClickCount];
 
-        imageDisplay.classList.remove("fade");
-        void imageDisplay.offsetWidth;
-        imageDisplay.classList.add("fade");
+        buttonHeight += 35;
+        buttonWidth += 35;
+        fontSize += 25;
 
-        buttonSize += 30;
-        fontSize += 12;
-
-        yesButton.style.height = `${buttonSize}px`;
-        yesButton.style.width = `${buttonSize + 20}px`;
+        yesButton.style.height = `${buttonHeight}px`;
+        yesButton.style.width = `${buttonWidth}px`;
         yesButton.style.fontSize = `${fontSize}px`;
 
         const texts = [
           "No",
           "Are you sure?",
-          "Baby please",
-          "Don't do this to me 😭",
-          "You're breaking my heart 💔",
-          "I'm gonna cry..."
+          "Babyy please",
+          "Don't do this to me Shrau :(",
+          "You're breaking my heart shrau",
+          "I'm gonna cry BABYY..."
         ];
-        noButton.textContent = texts[noClickCount] || "No";
+
+        noButton.textContent = texts[noClickCount];
       }
     });
 
-    // ✅ YES CLICK
+    // ✅ YES CLICK → HAPPY MUSIC
     yesButton.addEventListener("click", () => {
       sadMusic.pause();
       sadMusic.currentTime = 0;
+
       happyMusic.play();
 
       imageDisplay.src = "./images/image7.gif";
-      imageDisplay.classList.add("fade");
-
-      valentineQuestion.textContent = "Yayyy!! 💃❤️";
+      valentineQuestion.textContent = "Yayyy NACHOO!! :3";
       responseButtons.style.display = "none";
 
       confetti();
