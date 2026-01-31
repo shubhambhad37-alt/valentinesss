@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valentines Day</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     .gradient-background {
       background: linear-gradient(
         180deg,
-        rgba(255, 208, 229, 1) 0%,
-        rgba(255, 232, 242, 1) 36%,
-        rgba(255, 255, 255, 1) 100%
+        #ffd0e5 0%,
+        #ffe8f2 36%,
+        #ffffff 100%
       );
     }
 
@@ -22,143 +21,138 @@
     }
 
     @keyframes bounce2 {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-20px);
-      }
-      60% {
-        transform: translateY(-10px);
-      }
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      60% { transform: translateY(-10px); }
     }
   </style>
 </head>
 
 <body class="gradient-background">
 
-  <div class="flex items-center justify-center h-screen">
-    <div class="flex flex-col items-center p-4">
+<div class="flex items-center justify-center h-screen">
+  <div class="flex flex-col items-center p-4">
 
-      <img
-        id="imageDisplay"
-        src="./images/image1.gif"
-        alt="Cute kitten with flowers"
-        class="rounded-md h-[300px]"
-        style="object-fit: cover;"
-      />
+    <img
+      id="imageDisplay"
+      src="./images/image1.gif"
+      class="rounded-md h-[300px]"
+      style="object-fit: cover;"
+    />
 
-      <h2
-        id="valentineQuestion"
-        class="text-4xl font-bold italic text-[#bd1e59] my-4"
+    <h2
+      id="valentineQuestion"
+      class="text-4xl font-bold italic text-[#bd1e59] my-4"
+    >
+      Will you be my Valentine?
+    </h2>
+
+    <div class="flex gap-4 pt-5 items-center" id="responseButtons">
+      <button
+        id="yesButton"
+        class="bounce2 px-4 py-2 bg-green-500 text-white rounded-md text-[20px] hover:bg-green-400 transition"
       >
-        Will you be my Valentine?
-      </h2>
+        Yes
+      </button>
 
-      <div class="flex gap-4 pt-5 items-center" id="responseButtons">
-        <button
-          id="yesButton"
-          class="bounce2 inline-flex items-center justify-center rounded-md text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition"
-        >
-          Yes
-        </button>
-
-        <button
-          id="noButton"
-          class="inline-flex items-center justify-center rounded-md text-[20px] font-medium hover:bg-red-700 h-12 min-w-[75px] px-4 py-2 bg-red-500 text-white transition"
-        >
-          No
-        </button>
-      </div>
+      <button
+        id="noButton"
+        class="px-4 py-2 bg-red-500 text-white rounded-md text-[20px] hover:bg-red-700 transition"
+      >
+        No
+      </button>
     </div>
+
   </div>
+</div>
 
-  <!-- 🎵 MUSIC FILES -->
-  <audio id="sadMusic" loop preload="auto">
-    <source src="./audio/sad.mp3" type="audio/mpeg">
-  </audio>
+<!-- 🎵 AUDIO -->
+<audio id="sadMusic" loop>
+  <source src="./audio/sad.mp3" type="audio/mpeg">
+</audio>
 
-  <audio id="happyMusic" loop preload="auto">
-    <source src="./audio/happy.mp3" type="audio/mpeg">
-  </audio>
+<audio id="happyMusic" loop>
+  <source src="./audio/happy.mp3" type="audio/mpeg">
+</audio>
 
-  <script type="module">
-    import confetti from "https://cdn.skypack.dev/canvas-confetti";
+<script type="module">
+  import confetti from "https://cdn.skypack.dev/canvas-confetti";
 
-    const yesButton = document.getElementById("yesButton");
-    const noButton = document.getElementById("noButton");
-    const imageDisplay = document.getElementById("imageDisplay");
-    const valentineQuestion = document.getElementById("valentineQuestion");
-    const responseButtons = document.getElementById("responseButtons");
-    const sadMusic = document.getElementById("sadMusic");
-    const happyMusic = document.getElementById("happyMusic");
+  const yesButton = document.getElementById("yesButton");
+  const noButton = document.getElementById("noButton");
+  const imageDisplay = document.getElementById("imageDisplay");
+  const valentineQuestion = document.getElementById("valentineQuestion");
+  const responseButtons = document.getElementById("responseButtons");
+  const sadMusic = document.getElementById("sadMusic");
+  const happyMusic = document.getElementById("happyMusic");
 
-    let noClickCount = 0;
-    let buttonHeight = 48;
-    let buttonWidth = 80;
-    let fontSize = 20;
+  let noClickCount = 0;
 
-    const imagePaths = [
-      "./images/image1.gif",
-      "./images/image2.gif",
-      "./images/image3.gif",
-      "./images/image4.gif",
-      "./images/image5.gif",
-      "./images/image6.gif",
-      "./images/image7.gif"
-    ];
+  // ❗ IMPORTANT:
+  // image6 = LAST SAD IMAGE
+  // image7 = YES IMAGE ONLY
+  const sadImages = [
+    "./images/image1.gif",
+    "./images/image2.gif",
+    "./images/image3.gif",
+    "./images/image4.gif",
+    "./images/image5.gif",
+    "./images/image6.gif"
+  ];
 
-    // 🚀 PRELOAD IMAGES (NO DELAY)
-    imagePaths.forEach(src => {
-      const img = new Image();
-      img.src = src;
+  const noTexts = [
+    "No",
+    "Are you sure Babe?",
+    "Babyy please 🥺",
+    "Don't do this Shrau Baal 😭",
+    "Shrau My heart is breaking 💔",
+    "atta kr click 👉👈"
+  ];
+
+  // ❌ NO BUTTON
+  noButton.addEventListener("click", () => {
+
+    if (noClickCount >= sadImages.length - 1) return;
+
+    if (sadMusic.paused) sadMusic.play();
+    happyMusic.pause();
+    happyMusic.currentTime = 0;
+
+    noClickCount++;
+
+    imageDisplay.src = sadImages[noClickCount];
+    noButton.textContent = noTexts[noClickCount];
+
+    // Grow YES button
+    yesButton.style.transform = `scale(${1 + noClickCount * 0.25})`;
+
+    // 🚫 FINAL NO → DISABLE COMPLETELY
+    if (noClickCount === sadImages.length - 1) {
+      noButton.disabled = true;
+      noButton.style.opacity = "0.4";
+      noButton.style.cursor = "not-allowed";
+    }
+  });
+
+  // ✅ YES BUTTON (ONLY PLACE WHERE HAPPY THINGS HAPPEN)
+  yesButton.addEventListener("click", () => {
+
+    sadMusic.pause();
+    sadMusic.currentTime = 0;
+
+    happyMusic.play();
+
+    imageDisplay.src = "./images/image7.gif"; // ❤️ ONLY HERE
+    valentineQuestion.textContent = "Yayyy NACHOO!! ❤️🥰";
+    responseButtons.style.display = "none";
+
+    confetti({
+      particleCount: 150,
+      spread: 90,
+      origin: { y: 0.6 }
     });
-
-    // ❌ NO CLICK → SAD MUSIC
-    noButton.addEventListener("click", () => {
-      if (sadMusic.paused) sadMusic.play();
-      happyMusic.pause();
-      happyMusic.currentTime = 0;
-
-      if (noClickCount < imagePaths.length - 1) {
-        noClickCount++;
-        imageDisplay.src = imagePaths[noClickCount];
-
-        buttonHeight += 35;
-        buttonWidth += 35;
-        fontSize += 25;
-
-        yesButton.style.height = `${buttonHeight}px`;
-        yesButton.style.width = `${buttonWidth}px`;
-        yesButton.style.fontSize = `${fontSize}px`;
-
-        const texts = [
-          "No",
-          "Are you sure?",
-          "Babyy please",
-          "Don't do this to me Shrau :(",
-          "You're breaking my heart shrau",
-          "I'm gonna cry BABYY..."
-        ];
-
-        noButton.textContent = texts[noClickCount];
-      }
-    });
-
-    // ✅ YES CLICK → HAPPY MUSIC
-    yesButton.addEventListener("click", () => {
-      sadMusic.pause();
-      sadMusic.currentTime = 0;
-
-      happyMusic.play();
-
-      imageDisplay.src = "./images/image7.gif";
-      valentineQuestion.textContent = "Yayyy NACHOO!! :3";
-      responseButtons.style.display = "none";
-
-      confetti();
-    });
-  </script>
+  });
+</script>
 
 </body>
 </html>
